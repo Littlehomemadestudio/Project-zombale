@@ -1,0 +1,209 @@
+{
+  "knife": {
+    "item_id": "knife",
+    "name": "Knife",
+    "type": "weapon",
+    "properties": {
+      "damage": 15,
+      "durability": 100,
+      "weight": 1,
+      "value": 10,
+      "ammo_type": null,
+      "mag_capacity": 0,
+      "current_ammo": 0
+    }
+  },
+  "small_backpack": {
+    "item_id": "small_backpack",
+    "name": "Small Backpack",
+    "type": "tool",
+    "properties": {
+      "storage_bonus": 5,
+      "weight": 2,
+      "value": 15
+    }
+  },
+  "basic_rations": {
+    "item_id": "basic_rations",
+    "name": "Basic Rations",
+    "type": "med",
+    "properties": {
+      "hunger_restore": 20,
+      "weight": 1,
+      "value": 5
+    }
+  },
+  "bandage": {
+    "item_id": "bandage",
+    "name": "Bandage",
+    "type": "med",
+    "properties": {
+      "hp_restore": 10,
+      "weight": 0.5,
+      "value": 8
+    }
+  },
+  "water_bottle": {
+    "item_id": "water_bottle",
+    "name": "Water Bottle",
+    "type": "med",
+    "properties": {
+      "thirst_restore": 30,
+      "weight": 1,
+      "value": 3
+    }
+  },
+  "wood": {
+    "item_id": "wood",
+    "name": "Wood",
+    "type": "resource",
+    "properties": {
+      "weight": 1,
+      "value": 2
+    }
+  },
+  "stone": {
+    "item_id": "stone",
+    "name": "Stone",
+    "type": "resource",
+    "properties": {
+      "weight": 2,
+      "value": 3
+    }
+  },
+  "metal": {
+    "item_id": "metal",
+    "name": "Metal",
+    "type": "resource",
+    "properties": {
+      "weight": 3,
+      "value": 5
+    }
+  },
+  "circuit": {
+    "item_id": "circuit",
+    "name": "Circuit",
+    "type": "component",
+    "properties": {
+      "weight": 0.5,
+      "value": 15
+    }
+  },
+  "cloth": {
+    "item_id": "cloth",
+    "name": "Cloth",
+    "type": "resource",
+    "properties": {
+      "weight": 0.5,
+      "value": 2
+    }
+  },
+  "ammo": {
+    "item_id": "ammo",
+    "name": "Ammunition",
+    "type": "resource",
+    "properties": {
+      "weight": 0.1,
+      "value": 1,
+      "ammo_type": "standard"
+    }
+  },
+  "fuel": {
+    "item_id": "fuel",
+    "name": "Fuel",
+    "type": "resource",
+    "properties": {
+      "weight": 2,
+      "value": 8
+    }
+  },
+  "medkit": {
+    "item_id": "medkit",
+    "name": "Medkit",
+    "type": "med",
+    "properties": {
+      "hp_restore": 50,
+      "weight": 2,
+      "value": 25
+    }
+  },
+  "rifle_part": {
+    "item_id": "rifle_part",
+    "name": "Rifle Part",
+    "type": "component",
+    "properties": {
+      "weight": 2,
+      "value": 30
+    }
+  },
+  "pistol": {
+    "item_id": "pistol",
+    "name": "Pistol",
+    "type": "weapon",
+    "properties": {
+      "damage": 25,
+      "durability": 80,
+      "weight": 2,
+      "value": 50,
+      "ammo_type": "standard",
+      "mag_capacity": 15,
+      "current_ammo": 0
+    }
+  },
+  "rifle": {
+    "item_id": "rifle",
+    "name": "Rifle",
+    "type": "weapon",
+    "properties": {
+      "damage": 40,
+      "durability": 90,
+      "weight": 4,
+      "value": 100,
+      "ammo_type": "standard",
+      "mag_capacity": 30,
+      "current_ammo": 0
+    }
+  },
+  "binoculars": {
+    "item_id": "binoculars",
+    "name": "Binoculars",
+    "type": "tool",
+    "properties": {
+      "seek_range": 3,
+      "weight": 1,
+      "value": 40
+    }
+  },
+  "flashlight": {
+    "item_id": "flashlight",
+    "name": "Flashlight",
+    "type": "tool",
+    "properties": {
+      "battery_charge": 100,
+      "visibility_bonus": 20,
+      "noise_penalty": 10,
+      "weight": 1,
+      "value": 20
+    }
+  },
+  "repair_kit": {
+    "item_id": "repair_kit",
+    "name": "Repair Kit",
+    "type": "tool",
+    "properties": {
+      "repair_amount": 20,
+      "weight": 2,
+      "value": 25
+    }
+  },
+  "spotter_device": {
+    "item_id": "spotter_device",
+    "name": "Spotter Device",
+    "type": "tool",
+    "properties": {
+      "intel_range": 5,
+      "weight": 1,
+      "value": 100
+    }
+  }
+}
