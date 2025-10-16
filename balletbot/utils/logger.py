@@ -1,31 +1,39 @@
 """
-Logging utilities for BalletBot: Outbreak Dominion
+Logging configuration for BalletBot: Outbreak Dominion
 """
 
 import logging
-import sys
+import os
 from pathlib import Path
-from config import LOG_LEVEL, LOG_FORMAT
+from config import LOG_LEVEL, LOG_FORMAT, LOG_FILE
 
 def setup_logging():
-    """Set up logging configuration"""
+    """Setup logging configuration"""
     # Create logs directory
-    Path("logs").mkdir(exist_ok=True)
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
     
     # Configure logging
     logging.basicConfig(
         level=getattr(logging, LOG_LEVEL.upper()),
         format=LOG_FORMAT,
         handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler("logs/balletbot.log"),
+            logging.FileHandler(LOG_FILE),
+            logging.StreamHandler()
         ]
     )
     
     # Set specific loggers
-    logging.getLogger("bale").setLevel(logging.WARNING)  # Reduce Bale API noise
-    logging.getLogger("PIL").setLevel(logging.WARNING)   # Reduce Pillow noise
-
-def get_logger(name: str) -> logging.Logger:
-    """Get a logger instance"""
-    return logging.getLogger(name)
+    loggers = [
+        'balletbot',
+        'bale',
+        'PIL'
+    ]
+    
+    for logger_name in loggers:
+        logger = logging.getLogger(logger_name)
+        logger.setLevel(getattr(logging, LOG_LEVEL.upper()))
+    
+    # Reduce Bale library logging
+    logging.getLogger('bale').setLevel(logging.WARNING)
+    logging.getLogger('PIL').setLevel(logging.WARNING)

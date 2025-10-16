@@ -12,11 +12,12 @@ from pathlib import Path
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
+from bale_api import BaleBot
 from core.game_loop import GameLoop
-from core.scheduler import Scheduler
 from core.world_manager import WorldManager
+from core.scheduler import Scheduler
 from utils.logger import setup_logging
-from bale_api import BaleAPI
+from config import BOT_TOKEN
 
 # Initialize logging
 setup_logging()
@@ -26,17 +27,17 @@ class BalletBot:
     """Main bot class that orchestrates all game systems"""
     
     def __init__(self):
-        self.bale_api = BaleAPI()
+        self.bot = BaleBot(BOT_TOKEN)
         self.world_manager = WorldManager()
         self.scheduler = Scheduler(self.world_manager)
-        self.game_loop = GameLoop(self.bale_api, self.world_manager, self.scheduler)
+        self.game_loop = GameLoop(self.bot, self.world_manager, self.scheduler)
         
     async def start(self):
         """Start the bot and all game systems"""
         logger.info("Starting BalletBot: Outbreak Dominion...")
         
         try:
-            # Initialize database
+            # Initialize world manager
             await self.world_manager.initialize()
             
             # Start scheduler

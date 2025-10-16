@@ -1,16 +1,13 @@
 """
 Crafting system for BalletBot: Outbreak Dominion
-Handles item crafting and recipes
+Manages item crafting and recipes
 """
 
-import json
 import logging
+import json
 from typing import Dict, List, Optional, Any, Tuple
-from pathlib import Path
-
-from utils.helpers import get_current_timestamp
-from utils.db import log_event
-from config import RECIPES_PATH
+from utils.file_manager import file_manager
+from utils.helpers import get_current_timestamp, add_action_to_history
 
 logger = logging.getLogger(__name__)
 
@@ -24,182 +21,159 @@ class CraftingSystem:
     def _load_recipes(self):
         """Load recipes from JSON file"""
         try:
-            recipes_path = Path(RECIPES_PATH)
-            if recipes_path.exists():
-                with open(recipes_path, 'r') as f:
-                    self.recipes = json.load(f)
-                logger.info(f"Loaded {len(self.recipes)} recipes")
-            else:
-                logger.warning(f"Recipes file not found: {RECIPES_PATH}")
+            with open("data/recipes.json", "r", encoding="utf-8") as f:
+                self.recipes = json.load(f)
+            logger.info(f"Loaded {len(self.recipes)} recipes")
         except Exception as e:
-            logger.error(f"Failed to load recipes: {e}")
+            logger.error(f"Error loading recipes: {e}")
+            self.recipes = {}
     
-    def get_recipe(self, item_id: str) -> Optional[Dict[str, Any]]:
-        """Get recipe for an item"""
+    def get_recipe(self, item_id: str) -> Optional[Dict]:
+        """Get recipe for item"""
         return self.recipes.get(item_id)
     
-    def get_all_recipes(self) -> Dict[str, Dict[str, Any]]:
-        """Get all available recipes"""
-        return self.recipes
+    def get_all_recipes(self) -> Dict[str, Dict]:
+        """Get all recipes"""
+        return self.recipes.copy()
     
-    def get_craftable_items(self, player_id: str) -> List[Dict[str, Any]]:
-        """Get items that player can craft"""
-        from systems.inventory_system import inventory_system
-        from systems.player_system import player_system
-        
-        player = player_system.get_player(player_id)
-        if not player:
+    def get_craftable_items(self, player_id: str) -> List[Dict]:
+        """Get items player can craft"""
+        try:
+            from systems.inventory_system import inventory_system
+            from systems.player_system import player_system
+            
+            player_data = player_system.get_player(player_id)
+            if not player_data:
+                return []
+            
+            craftable_items = []
+            
+            for item_id, recipe in self.recipes.items():
+                can_craft, missing_items = inventory_system.can_craft_item(player_id, recipe)
+                
+                craftable_items.append({
+                    "item_id": item_id,
+                    "name": recipe.get("name", item_id),
+                    "can_craft": can_craft,
+                    "missing_items": missing_items,
+                    "recipe": recipe
+                })
+            
+            return craftable_items
+            
+        except Exception as e:
+            logger.error(f"Error getting craftable items for player {player_id}: {e}")
             return []
-        
-        craftable = []
-        
-        for item_id, recipe in self.recipes.items():
-            can_craft, missing = inventory_system.can_craft_item(player_id, recipe)
-            if can_craft:
-                craftable.append({
-                    "item_id": item_id,
-                    "name": recipe.get("name", item_id),
-                    "recipe": recipe,
-                    "missing_items": []
-                })
-            else:
-                craftable.append({
-                    "item_id": item_id,
-                    "name": recipe.get("name", item_id),
-                    "recipe": recipe,
-                    "missing_items": missing
-                })
-        
-        return craftable
     
     def craft_item(self, player_id: str, item_id: str) -> Dict[str, Any]:
-        """Craft an item for a player"""
-        from systems.inventory_system import inventory_system
-        from systems.player_system import player_system
-        
-        # Get recipe
+        """Craft an item"""
+        try:
+            from systems.inventory_system import inventory_system
+            from systems.player_system import player_system
+            
+            # Get recipe
+            recipe = self.get_recipe(item_id)
+            if not recipe:
+                return {"success": False, "error": f"Recipe for {item_id} not found"}
+            
+            # Check if player can craft
+            can_craft, missing_items = inventory_system.can_craft_item(player_id, recipe)
+            if not can_craft:
+                return {
+                    "success": False, 
+                    "error": f"Cannot craft {item_id}. Missing: {', '.join(missing_items)}"
+                }
+            
+            # Check cooldown
+            if not player_system.check_cooldown(player_id, "craft"):
+                return {"success": False, "error": "Crafting is on cooldown"}
+            
+            # Consume materials
+            if not inventory_system.consume_crafting_materials(player_id, recipe):
+                return {"success": False, "error": "Failed to consume materials"}
+            
+            # Add crafted item
+            quantity = recipe.get("quantity", 1)
+            if not inventory_system.add_item(player_id, item_id, quantity):
+                return {"success": False, "error": "Failed to add crafted item"}
+            
+            # Set cooldown
+            player_system.set_cooldown(player_id, "craft")
+            
+            # Add to action history
+            add_action_to_history(player_id, "item_crafted", item_id=item_id, quantity=quantity)
+            
+            # Update intelligence
+            intelligence_gain = recipe.get("intelligence_gain", 1)
+            if intelligence_gain > 0:
+                player_system.update_intelligence(player_id, intelligence_gain)
+            
+            logger.info(f"Player {player_id} crafted {item_id} x{quantity}")
+            
+            return {
+                "success": True,
+                "item_id": item_id,
+                "quantity": quantity,
+                "message": f"✅ Successfully crafted {recipe.get('name', item_id)} x{quantity}"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error crafting item {item_id} for player {player_id}: {e}")
+            return {"success": False, "error": "Failed to craft item"}
+    
+    def get_recipe_info(self, item_id: str) -> str:
+        """Get formatted recipe information"""
         recipe = self.get_recipe(item_id)
         if not recipe:
-            return {"success": False, "error": f"Recipe not found for {item_id}"}
+            return f"❌ Recipe for {item_id} not found"
         
-        # Check if player can craft
-        can_craft, missing_items = inventory_system.can_craft_item(player_id, recipe)
-        if not can_craft:
-            return {
-                "success": False, 
-                "error": f"Cannot craft {item_id}",
-                "missing_items": missing_items
-            }
-        
-        # Check if player has required tools
-        tools_required = recipe.get("tools_required", [])
-        if tools_required:
-            # TODO: Check if player has required tools
-            pass
-        
-        # Consume materials
-        if not inventory_system.consume_crafting_materials(player_id, recipe):
-            return {"success": False, "error": "Failed to consume materials"}
-        
-        # Add crafted item
-        if not inventory_system.add_item(player_id, item_id, 1):
-            return {"success": False, "error": "Failed to add crafted item"}
-        
-        # Add intelligence gain
-        intelligence_gain = recipe.get("intelligence", 0) // 10  # Small intelligence gain
-        if intelligence_gain > 0:
-            player_system.update_player_intelligence(player_id, intelligence_gain)
-        
-        # Log crafting event
-        log_event("item_crafted", {
-            "player_id": player_id,
-            "item_id": item_id,
-            "recipe": recipe,
-            "intelligence_gain": intelligence_gain
-        })
-        
-        return {
-            "success": True,
-            "item_id": item_id,
-            "name": recipe.get("name", item_id),
-            "intelligence_gain": intelligence_gain
-        }
+        from utils.helpers import format_recipe_info
+        return format_recipe_info(recipe)
     
-    def get_crafting_display(self, player_id: str) -> str:
-        """Get formatted crafting display for player"""
+    def format_craftable_items(self, player_id: str) -> str:
+        """Format craftable items for display"""
         craftable_items = self.get_craftable_items(player_id)
         
         if not craftable_items:
-            return "🔨 **Crafting**\nNo items available to craft."
+            return "🔧 **No craftable items available**"
         
-        display = "🔨 **Available Recipes:**\n\n"
+        display = "🔧 **Craftable Items:**\n\n"
         
         for item in craftable_items:
-            recipe = item["recipe"]
-            name = item["name"]
-            missing = item["missing_items"]
-            
-            if missing:
-                display += f"❌ **{name}** (Missing: {', '.join(missing)})\n"
+            if item["can_craft"]:
+                display += f"✅ **{item['name']}**\n"
             else:
-                display += f"✅ **{name}** - `/craft {item['item_id']}`\n"
-                
-                # Show required materials
-                resources = recipe.get("resources", {})
-                if resources:
-                    materials = [f"{item} x{qty}" for item, qty in resources.items()]
-                    display += f"   Materials: {', '.join(materials)}\n"
-                
-                # Show intelligence requirement
-                intel_req = recipe.get("intelligence", 0)
-                if intel_req > 0:
-                    display += f"   Intelligence: {intel_req}\n"
-                
-                display += "\n"
-        
-        return display.strip()
-    
-    def get_recipe_display(self, item_id: str) -> str:
-        """Get formatted recipe display"""
-        recipe = self.get_recipe(item_id)
-        if not recipe:
-            return f"Recipe not found for {item_id}"
-        
-        name = recipe.get("name", item_id)
-        resources = recipe.get("resources", {})
-        intelligence = recipe.get("intelligence", 0)
-        time_required = recipe.get("time_required", 0)
-        tools = recipe.get("tools_required", [])
-        
-        display = f"🔨 **{name} Recipe**\n\n"
-        
-        if resources:
-            display += "**Materials:**\n"
-            for item, qty in resources.items():
-                display += f"• {item} x{qty}\n"
+                display += f"❌ **{item['name']}**\n"
+                display += f"   Missing: {', '.join(item['missing_items'])}\n"
+            
+            # Show recipe requirements
+            recipe = item["recipe"]
+            resources = recipe.get("resources", {})
+            if resources:
+                display += "   Resources: "
+                resource_list = [f"{resource} x{qty}" for resource, qty in resources.items()]
+                display += ", ".join(resource_list) + "\n"
+            
+            intelligence = recipe.get("intelligence", 0)
+            if intelligence > 0:
+                display += f"   Intelligence: {intelligence}\n"
+            
+            time_required = recipe.get("time_required", 0)
+            if time_required > 0:
+                display += f"   Time: {time_required}s\n"
+            
             display += "\n"
         
-        if intelligence > 0:
-            display += f"**Intelligence Required:** {intelligence}\n"
-        
-        if time_required > 0:
-            minutes = time_required // 60
-            seconds = time_required % 60
-            display += f"**Time Required:** {minutes}m {seconds}s\n"
-        
-        if tools:
-            display += f"**Tools Required:** {', '.join(tools)}\n"
-        
-        return display.strip()
+        return display
     
-    def search_recipes(self, search_term: str) -> List[Dict[str, Any]]:
-        """Search recipes by name or item_id"""
-        search_term = search_term.lower()
+    def search_recipes(self, query: str) -> List[Dict]:
+        """Search recipes by name or item"""
+        query = query.lower()
         results = []
         
         for item_id, recipe in self.recipes.items():
-            name = recipe.get("name", item_id).lower()
-            if search_term in name or search_term in item_id.lower():
+            name = recipe.get("name", "").lower()
+            if query in name or query in item_id.lower():
                 results.append({
                     "item_id": item_id,
                     "name": recipe.get("name", item_id),
@@ -208,65 +182,180 @@ class CraftingSystem:
         
         return results
     
-    def get_crafting_stats(self, player_id: str) -> Dict[str, Any]:
-        """Get crafting statistics for a player"""
-        from systems.player_system import player_system
-        
-        player = player_system.get_player(player_id)
-        if not player:
-            return {}
-        
-        intelligence = player.get("intelligence", 0)
-        craftable_count = len([item for item in self.get_craftable_items(player_id) 
-                              if not item["missing_items"]])
-        
-        return {
-            "intelligence": intelligence,
-            "craftable_items": craftable_count,
-            "total_recipes": len(self.recipes),
-            "crafting_level": intelligence // 10  # Simple level calculation
-        }
-    
-    def create_recipe(self, item_id: str, name: str, resources: Dict[str, int],
-                     intelligence: int = 0, time_required: int = 0,
-                     tools_required: List[str] = None) -> bool:
+    def create_recipe(self, item_id: str, recipe_data: Dict) -> bool:
         """Create a new recipe"""
         try:
-            recipe = {
-                "item_id": item_id,
-                "name": name,
-                "resources": resources,
-                "intelligence": intelligence,
-                "time_required": time_required,
-                "tools_required": tools_required or []
-            }
-            
-            self.recipes[item_id] = recipe
-            
-            # Save to file
+            self.recipes[item_id] = recipe_data
             self._save_recipes()
-            
-            log_event("recipe_created", {
-                "item_id": item_id,
-                "name": name,
-                "creator": "system"
-            })
-            
+            logger.info(f"Created recipe for {item_id}")
             return True
+            
         except Exception as e:
-            logger.error(f"Failed to create recipe {item_id}: {e}")
+            logger.error(f"Error creating recipe for {item_id}: {e}")
             return False
     
     def _save_recipes(self):
         """Save recipes to file"""
         try:
-            recipes_path = Path(RECIPES_PATH)
-            recipes_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(recipes_path, 'w') as f:
-                json.dump(self.recipes, f, indent=2)
+            with open("data/recipes.json", "w", encoding="utf-8") as f:
+                json.dump(self.recipes, f, indent=2, ensure_ascii=False)
         except Exception as e:
-            logger.error(f"Failed to save recipes: {e}")
+            logger.error(f"Error saving recipes: {e}")
+    
+    def get_recipe_requirements(self, item_id: str) -> Dict[str, Any]:
+        """Get recipe requirements"""
+        recipe = self.get_recipe(item_id)
+        if not recipe:
+            return {}
+        
+        return {
+            "resources": recipe.get("resources", {}),
+            "intelligence": recipe.get("intelligence", 0),
+            "time_required": recipe.get("time_required", 0),
+            "tools_required": recipe.get("tools_required", []),
+            "quantity": recipe.get("quantity", 1)
+        }
+    
+    def can_craft_with_intelligence(self, player_id: str, item_id: str) -> bool:
+        """Check if player can craft item based on intelligence"""
+        try:
+            from systems.player_system import player_system
+            
+            recipe = self.get_recipe(item_id)
+            if not recipe:
+                return False
+            
+            required_intelligence = recipe.get("intelligence", 0)
+            if required_intelligence == 0:
+                return True
+            
+            player_data = player_system.get_player(player_id)
+            if not player_data:
+                return False
+            
+            player_intelligence = player_data.get("intelligence", 0)
+            return player_intelligence >= required_intelligence
+            
+        except Exception as e:
+            logger.error(f"Error checking intelligence for crafting: {e}")
+            return False
+    
+    def get_crafting_time(self, item_id: str) -> int:
+        """Get crafting time for item"""
+        recipe = self.get_recipe(item_id)
+        if not recipe:
+            return 0
+        
+        return recipe.get("time_required", 0)
+    
+    def get_crafting_xp(self, item_id: str) -> int:
+        """Get XP gained from crafting item"""
+        recipe = self.get_recipe(item_id)
+        if not recipe:
+            return 0
+        
+        return recipe.get("intelligence_gain", 1)
+    
+    def format_recipe_detailed(self, item_id: str) -> str:
+        """Format detailed recipe information"""
+        recipe = self.get_recipe(item_id)
+        if not recipe:
+            return f"❌ Recipe for {item_id} not found"
+        
+        display = f"🔧 **{recipe.get('name', item_id)} Recipe**\n\n"
+        
+        # Resources
+        resources = recipe.get("resources", {})
+        if resources:
+            display += "📦 **Resources needed:**\n"
+            for resource, qty in resources.items():
+                display += f"• {resource} x{qty}\n"
+            display += "\n"
+        
+        # Intelligence requirement
+        intelligence = recipe.get("intelligence", 0)
+        if intelligence > 0:
+            display += f"🧠 **Intelligence required:** {intelligence}\n\n"
+        
+        # Time requirement
+        time_required = recipe.get("time_required", 0)
+        if time_required > 0:
+            display += f"⏱️ **Crafting time:** {time_required} seconds\n\n"
+        
+        # Tools required
+        tools = recipe.get("tools_required", [])
+        if tools:
+            display += "🔨 **Tools required:**\n"
+            for tool in tools:
+                display += f"• {tool}\n"
+            display += "\n"
+        
+        # Quantity
+        quantity = recipe.get("quantity", 1)
+        display += f"📦 **Quantity produced:** {quantity}\n"
+        
+        # XP gain
+        xp_gain = recipe.get("intelligence_gain", 1)
+        if xp_gain > 0:
+            display += f"🧠 **XP gained:** {xp_gain}\n"
+        
+        return display
+    
+    def get_available_recipes_by_type(self, player_id: str, item_type: str) -> List[Dict]:
+        """Get available recipes by item type"""
+        try:
+            from systems.inventory_system import inventory_system
+            
+            available_recipes = []
+            
+            for item_id, recipe in self.recipes.items():
+                # Check if recipe produces item of requested type
+                if recipe.get("type") == item_type:
+                    can_craft, missing_items = inventory_system.can_craft_item(player_id, recipe)
+                    available_recipes.append({
+                        "item_id": item_id,
+                        "name": recipe.get("name", item_id),
+                        "can_craft": can_craft,
+                        "missing_items": missing_items,
+                        "recipe": recipe
+                    })
+            
+            return available_recipes
+            
+        except Exception as e:
+            logger.error(f"Error getting recipes by type for player {player_id}: {e}")
+            return []
+    
+    def get_crafting_progress(self, player_id: str) -> Dict[str, Any]:
+        """Get player's crafting progress"""
+        try:
+            from systems.player_system import player_system
+            
+            player_data = player_system.get_player(player_id)
+            if not player_data:
+                return {}
+            
+            # Get action history for crafting
+            from utils.helpers import get_action_history
+            actions = get_action_history(player_id, 50)
+            
+            crafted_items = {}
+            for action in actions:
+                if action.get("action") == "item_crafted":
+                    item_id = action.get("item_id")
+                    if item_id:
+                        crafted_items[item_id] = crafted_items.get(item_id, 0) + 1
+            
+            return {
+                "total_crafted": sum(crafted_items.values()),
+                "unique_items": len(crafted_items),
+                "crafted_items": crafted_items,
+                "intelligence": player_data.get("intelligence", 0)
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting crafting progress for player {player_id}: {e}")
+            return {}
 
 # Global crafting system instance
 crafting_system = CraftingSystem()
