@@ -1,4 +1,65 @@
 {
+  "wood": {
+    "item_id": "wood",
+    "name": "Wood",
+    "type": "resource",
+    "properties": {
+      "weight": 1,
+      "value": 2,
+      "description": "Basic building material"
+    }
+  },
+  "stone": {
+    "item_id": "stone",
+    "name": "Stone",
+    "type": "resource",
+    "properties": {
+      "weight": 2,
+      "value": 3,
+      "description": "Heavy building material"
+    }
+  },
+  "metal": {
+    "item_id": "metal",
+    "name": "Metal",
+    "type": "resource",
+    "properties": {
+      "weight": 3,
+      "value": 5,
+      "description": "Durable metal scrap"
+    }
+  },
+  "cloth": {
+    "item_id": "cloth",
+    "name": "Cloth",
+    "type": "resource",
+    "properties": {
+      "weight": 0.5,
+      "value": 1,
+      "description": "Fabric material"
+    }
+  },
+  "water": {
+    "item_id": "water",
+    "name": "Water",
+    "type": "resource",
+    "properties": {
+      "weight": 1,
+      "value": 2,
+      "description": "Clean drinking water"
+    }
+  },
+  "food": {
+    "item_id": "food",
+    "name": "Food",
+    "type": "food",
+    "properties": {
+      "weight": 1,
+      "value": 3,
+      "hunger_restore": 20,
+      "description": "Basic rations"
+    }
+  },
   "knife": {
     "item_id": "knife",
     "name": "Knife",
@@ -10,130 +71,8 @@
       "value": 10,
       "ammo_type": null,
       "mag_capacity": 0,
-      "current_ammo": 0
-    }
-  },
-  "small_backpack": {
-    "item_id": "small_backpack",
-    "name": "Small Backpack",
-    "type": "tool",
-    "properties": {
-      "storage_bonus": 5,
-      "weight": 2,
-      "value": 15
-    }
-  },
-  "basic_rations": {
-    "item_id": "basic_rations",
-    "name": "Basic Rations",
-    "type": "med",
-    "properties": {
-      "hunger_restore": 20,
-      "weight": 1,
-      "value": 5
-    }
-  },
-  "bandage": {
-    "item_id": "bandage",
-    "name": "Bandage",
-    "type": "med",
-    "properties": {
-      "hp_restore": 10,
-      "weight": 0.5,
-      "value": 8
-    }
-  },
-  "water_bottle": {
-    "item_id": "water_bottle",
-    "name": "Water Bottle",
-    "type": "med",
-    "properties": {
-      "thirst_restore": 30,
-      "weight": 1,
-      "value": 3
-    }
-  },
-  "wood": {
-    "item_id": "wood",
-    "name": "Wood",
-    "type": "resource",
-    "properties": {
-      "weight": 1,
-      "value": 2
-    }
-  },
-  "stone": {
-    "item_id": "stone",
-    "name": "Stone",
-    "type": "resource",
-    "properties": {
-      "weight": 2,
-      "value": 3
-    }
-  },
-  "metal": {
-    "item_id": "metal",
-    "name": "Metal",
-    "type": "resource",
-    "properties": {
-      "weight": 3,
-      "value": 5
-    }
-  },
-  "circuit": {
-    "item_id": "circuit",
-    "name": "Circuit",
-    "type": "component",
-    "properties": {
-      "weight": 0.5,
-      "value": 15
-    }
-  },
-  "cloth": {
-    "item_id": "cloth",
-    "name": "Cloth",
-    "type": "resource",
-    "properties": {
-      "weight": 0.5,
-      "value": 2
-    }
-  },
-  "ammo": {
-    "item_id": "ammo",
-    "name": "Ammunition",
-    "type": "resource",
-    "properties": {
-      "weight": 0.1,
-      "value": 1,
-      "ammo_type": "standard"
-    }
-  },
-  "fuel": {
-    "item_id": "fuel",
-    "name": "Fuel",
-    "type": "resource",
-    "properties": {
-      "weight": 2,
-      "value": 8
-    }
-  },
-  "medkit": {
-    "item_id": "medkit",
-    "name": "Medkit",
-    "type": "med",
-    "properties": {
-      "hp_restore": 50,
-      "weight": 2,
-      "value": 25
-    }
-  },
-  "rifle_part": {
-    "item_id": "rifle_part",
-    "name": "Rifle Part",
-    "type": "component",
-    "properties": {
-      "weight": 2,
-      "value": 30
+      "current_ammo": 0,
+      "description": "Sharp blade for close combat"
     }
   },
   "pistol": {
@@ -145,9 +84,10 @@
       "durability": 80,
       "weight": 2,
       "value": 50,
-      "ammo_type": "standard",
-      "mag_capacity": 15,
-      "current_ammo": 0
+      "ammo_type": "pistol_ammo",
+      "mag_capacity": 12,
+      "current_ammo": 0,
+      "description": "Semi-automatic pistol"
     }
   },
   "rifle": {
@@ -159,19 +99,100 @@
       "durability": 90,
       "weight": 4,
       "value": 100,
-      "ammo_type": "standard",
+      "ammo_type": "rifle_ammo",
       "mag_capacity": 30,
-      "current_ammo": 0
+      "current_ammo": 0,
+      "description": "Assault rifle"
     }
   },
-  "binoculars": {
-    "item_id": "binoculars",
-    "name": "Binoculars",
+  "pistol_ammo": {
+    "item_id": "pistol_ammo",
+    "name": "Pistol Ammo",
+    "type": "ammo",
+    "properties": {
+      "weight": 0.1,
+      "value": 2,
+      "ammo_type": "pistol_ammo",
+      "quantity": 1,
+      "description": "9mm pistol ammunition"
+    }
+  },
+  "rifle_ammo": {
+    "item_id": "rifle_ammo",
+    "name": "Rifle Ammo",
+    "type": "ammo",
+    "properties": {
+      "weight": 0.2,
+      "value": 3,
+      "ammo_type": "rifle_ammo",
+      "quantity": 1,
+      "description": "5.56mm rifle ammunition"
+    }
+  },
+  "bandage": {
+    "item_id": "bandage",
+    "name": "Bandage",
+    "type": "med",
+    "properties": {
+      "weight": 0.5,
+      "value": 5,
+      "heal_amount": 20,
+      "description": "Basic medical bandage"
+    }
+  },
+  "medkit": {
+    "item_id": "medkit",
+    "name": "Medkit",
+    "type": "med",
+    "properties": {
+      "weight": 2,
+      "value": 25,
+      "heal_amount": 50,
+      "description": "Advanced medical kit"
+    }
+  },
+  "antibiotic": {
+    "item_id": "antibiotic",
+    "name": "Antibiotic",
+    "type": "med",
+    "properties": {
+      "weight": 0.3,
+      "value": 15,
+      "infection_reduction": 30,
+      "description": "Fights bacterial infections"
+    }
+  },
+  "antiviral": {
+    "item_id": "antiviral",
+    "name": "Antiviral",
+    "type": "med",
+    "properties": {
+      "weight": 0.3,
+      "value": 20,
+      "infection_reduction": 40,
+      "description": "Fights viral infections"
+    }
+  },
+  "small_backpack": {
+    "item_id": "small_backpack",
+    "name": "Small Backpack",
     "type": "tool",
     "properties": {
-      "seek_range": 3,
       "weight": 1,
-      "value": 40
+      "value": 15,
+      "storage_bonus": 10,
+      "description": "Increases inventory capacity"
+    }
+  },
+  "large_backpack": {
+    "item_id": "large_backpack",
+    "name": "Large Backpack",
+    "type": "tool",
+    "properties": {
+      "weight": 2,
+      "value": 30,
+      "storage_bonus": 25,
+      "description": "Significantly increases inventory capacity"
     }
   },
   "flashlight": {
@@ -179,21 +200,33 @@
     "name": "Flashlight",
     "type": "tool",
     "properties": {
-      "battery_charge": 100,
-      "visibility_bonus": 20,
-      "noise_penalty": 10,
       "weight": 1,
-      "value": 20
+      "value": 20,
+      "visibility_bonus": 20,
+      "battery_charge": 100,
+      "description": "Provides light in dark areas"
     }
   },
-  "repair_kit": {
-    "item_id": "repair_kit",
-    "name": "Repair Kit",
+  "binoculars": {
+    "item_id": "binoculars",
+    "name": "Binoculars",
     "type": "tool",
     "properties": {
-      "repair_amount": 20,
+      "weight": 1,
+      "value": 40,
+      "seek_range": 3,
+      "description": "Extends vision range for seeking"
+    }
+  },
+  "radio": {
+    "item_id": "radio",
+    "name": "Radio",
+    "type": "tool",
+    "properties": {
       "weight": 2,
-      "value": 25
+      "value": 50,
+      "battery_charge": 100,
+      "description": "Allows radio communication"
     }
   },
   "spotter_device": {
@@ -201,9 +234,153 @@
     "name": "Spotter Device",
     "type": "tool",
     "properties": {
-      "intel_range": 5,
       "weight": 1,
-      "value": 100
+      "value": 100,
+      "description": "Advanced intelligence gathering device"
+    }
+  },
+  "repair_kit": {
+    "item_id": "repair_kit",
+    "name": "Repair Kit",
+    "type": "tool",
+    "properties": {
+      "weight": 2,
+      "value": 30,
+      "repair_amount": 20,
+      "description": "Repairs damaged equipment"
+    }
+  },
+  "fuel": {
+    "item_id": "fuel",
+    "name": "Fuel",
+    "type": "resource",
+    "properties": {
+      "weight": 3,
+      "value": 8,
+      "description": "Vehicle fuel"
+    }
+  },
+  "circuit": {
+    "item_id": "circuit",
+    "name": "Circuit",
+    "type": "component",
+    "properties": {
+      "weight": 0.5,
+      "value": 15,
+      "description": "Electronic circuit board"
+    }
+  },
+  "battery": {
+    "item_id": "battery",
+    "name": "Battery",
+    "type": "component",
+    "properties": {
+      "weight": 0.5,
+      "value": 10,
+      "charge": 100,
+      "description": "Rechargeable battery"
+    }
+  },
+  "steel": {
+    "item_id": "steel",
+    "name": "Steel",
+    "type": "resource",
+    "properties": {
+      "weight": 4,
+      "value": 12,
+      "description": "High-quality steel"
+    }
+  },
+  "engine_parts": {
+    "item_id": "engine_parts",
+    "name": "Engine Parts",
+    "type": "vehicle_part",
+    "properties": {
+      "weight": 5,
+      "value": 50,
+      "description": "Vehicle engine components"
+    }
+  },
+  "basic_rations": {
+    "item_id": "basic_rations",
+    "name": "Basic Rations",
+    "type": "food",
+    "properties": {
+      "weight": 1,
+      "value": 5,
+      "hunger_restore": 30,
+      "description": "Military-style rations"
+    }
+  },
+  "alcohol": {
+    "item_id": "alcohol",
+    "name": "Alcohol",
+    "type": "resource",
+    "properties": {
+      "weight": 1,
+      "value": 8,
+      "description": "Disinfectant and fuel"
+    }
+  },
+  "paper": {
+    "item_id": "paper",
+    "name": "Paper",
+    "type": "resource",
+    "properties": {
+      "weight": 0.1,
+      "value": 1,
+      "description": "Writing material"
+    }
+  },
+  "pen": {
+    "item_id": "pen",
+    "name": "Pen",
+    "type": "tool",
+    "properties": {
+      "weight": 0.1,
+      "value": 2,
+      "description": "Writing instrument"
+    }
+  },
+  "bone": {
+    "item_id": "bone",
+    "name": "Bone",
+    "type": "resource",
+    "properties": {
+      "weight": 1,
+      "value": 3,
+      "description": "Animal bone"
+    }
+  },
+  "rotten_flesh": {
+    "item_id": "rotten_flesh",
+    "name": "Rotten Flesh",
+    "type": "resource",
+    "properties": {
+      "weight": 1,
+      "value": 1,
+      "description": "Decayed organic matter"
+    }
+  },
+  "herbs": {
+    "item_id": "herbs",
+    "name": "Herbs",
+    "type": "resource",
+    "properties": {
+      "weight": 0.5,
+      "value": 4,
+      "description": "Medicinal plants"
+    }
+  },
+  "fish": {
+    "item_id": "fish",
+    "name": "Fish",
+    "type": "food",
+    "properties": {
+      "weight": 1,
+      "value": 6,
+      "hunger_restore": 25,
+      "description": "Fresh fish"
     }
   }
 }

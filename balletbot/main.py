@@ -12,7 +12,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
-from bale_api import BaleBot
+from bale_api import BaleAPI
 from core.game_loop import GameLoop
 from core.world_manager import WorldManager
 from core.scheduler import Scheduler
@@ -27,7 +27,7 @@ class BalletBot:
     """Main bot class that orchestrates all game systems"""
     
     def __init__(self):
-        self.bot = BaleBot(BOT_TOKEN)
+        self.bot = BaleAPI(BOT_TOKEN)
         self.world_manager = WorldManager()
         self.scheduler = Scheduler(self.world_manager)
         self.game_loop = GameLoop(self.bot, self.world_manager, self.scheduler)

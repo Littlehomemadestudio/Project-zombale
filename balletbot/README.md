@@ -2,7 +2,32 @@
 
 A real-time, persistent multiplayer zombie survival simulator for Bale messenger. Players must scavenge resources, build shelters, craft weapons, and survive against both zombies and other players in a post-apocalyptic world.
 
-## Features
+## 🚀 Quick Start
+
+### Installation
+
+1. **Install Python 3.10+**
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure the bot:**
+   - Edit `config.py` and set your Bale bot token
+   - Adjust `TIME_MULTIPLIER` for faster/slower gameplay during testing
+
+4. **Run the bot:**
+   ```bash
+   python main.py
+   ```
+
+### Test the Implementation
+
+```bash
+python test_implementation.py
+```
+
+## ✨ Features
 
 ### Core Gameplay
 - **Character Classes**: Scavenger, Mechanic, Soldier with unique bonuses
@@ -26,47 +51,7 @@ A real-time, persistent multiplayer zombie survival simulator for Bale messenger
 - **Map System**: Purchase detailed maps of regions
 - **Weather Effects**: Day/night cycles affect gameplay
 
-## Installation
-
-### Prerequisites
-- Python 3.10 or higher
-- Bale messenger account and bot token
-
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd balletbot
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure the bot**
-   - Edit `config.py` to adjust game settings
-   - Set `TIME_MULTIPLIER` for faster/slower gameplay during testing
-   - Configure `DATABASE_PATH` if needed
-
-4. **Set up Bale API**
-   - Replace the mock implementation in `bale_api.py` with actual Bale API
-   - Add your bot token to the BaleAPI initialization
-
-5. **Initialize the database**
-   ```bash
-   python main.py
-   ```
-   The database will be created automatically on first run.
-
-## Usage
-
-### Starting the Bot
-
-```bash
-python main.py
-```
+## 🎮 Commands
 
 ### Admin Commands (Group Chat)
 - `/start_season` - Start a new game season
@@ -98,9 +83,27 @@ python main.py
 - `/chop` - Chop wood
 - `/vehicle <action> <vehicle_id>` - Vehicle commands
 
-## Game Mechanics
+## 🏗️ Architecture
 
-### Character Classes
+### File-Based Data Storage
+This implementation uses text files instead of SQLite for data persistence:
+- `data/players.txt` - Player data
+- `data/inventories.txt` - Player inventories
+- `data/world.txt` - World regions
+- `data/buildings.txt` - Building data
+- `data/vehicles.txt` - Vehicle data
+- `data/pending_actions.txt` - Pending actions
+- `data/construction.txt` - Construction projects
+- `data/events.txt` - Game events
+- `data/logs.txt` - System logs
+
+### Bale API Integration
+The bot includes a flexible Bale API wrapper that:
+- Uses the real Bale Python API when available
+- Falls back to mock mode for development/testing
+- Handles all Bale-specific functionality (messages, photos, keyboards, etc.)
+
+## 🎯 Character Classes
 
 **Scavenger**
 - +10% loot yield
@@ -117,7 +120,7 @@ python main.py
 - +10 health bonus
 - Best for combat
 
-### Combat System
+## ⚔️ Combat System
 
 - **Initiative**: Based on speed, class, and random factors
 - **Damage**: Weapon damage + class bonuses + random variation
@@ -125,14 +128,14 @@ python main.py
 - **Armor**: Reduces incoming damage
 - **Ammo Management**: Weapons consume ammunition
 
-### Building System
+## 🏢 Building System
 
 - **Floor Encounters**: Face zombies when entering building floors
 - **Decision Windows**: 7 seconds to choose sneak or attack
 - **Difficulty Scaling**: Higher floors have stronger zombies
 - **Loot Rewards**: Clear floors to get better loot
 
-### Offline Modes
+## 💤 Offline Modes
 
 **Ambush Mode**
 - Set trap while offline
@@ -144,14 +147,14 @@ python main.py
 - Success depends on region danger and base defense
 - Reduced armor effectiveness if attacked
 
-### Vehicle System
+## 🚗 Vehicle System
 
 - **Condition Management**: Repair vehicles with repair kits
 - **Fuel System**: Consume fuel for long-distance travel
 - **Storage**: Vehicles provide additional inventory space
 - **Types**: Bikes, Jeeps, Trucks, Tanks, Helicopters, Warships
 
-## Configuration
+## 🔧 Configuration
 
 ### Time Settings
 ```python
@@ -166,59 +169,37 @@ MAP_FIRST_COST = {"wood": 10, "stone": 10}
 MAP_DETAILED_COST = {"wood": 50, "stone": 25, "metal": 10}
 ```
 
-### Combat Settings
-```python
-COMBAT_CRITICAL_HIT_CHANCE = 5  # Percentage
-COMBAT_ALERTED_BONUS = 15  # Damage bonus when alerted
-COMBAT_AMBUSH_BONUS = 100  # Double damage for ambush
+## 🧪 Testing
+
+### Run Basic Tests
+```bash
+python test_implementation.py
 ```
 
-## Testing
+This tests all core systems without requiring Bale API.
 
 ### Run Simulation
 ```bash
 python tests/simulate.py
 ```
 
-This creates test players and simulates game activity for testing purposes.
+This creates test players and simulates game activity.
 
-### Test Commands
-The simulation script will:
-- Create 5 test players with different classes
-- Simulate movement, looting, crafting, and combat
-- Run for 2 minutes with 10-second ticks
-- Display summary statistics
+## 📁 Project Structure
 
-## Database Schema
-
-The bot uses SQLite with the following main tables:
-- `players` - Player characters and stats
-- `inventories` - Player item inventories
-- `items` - Item definitions and properties
-- `world_regions` - World regions and zombie counts
-- `buildings` - Buildings and floor information
-- `vehicles` - Vehicle data and condition
-- `pending_actions` - Time-based action queue
-- `construction` - Ongoing construction projects
-- `events` - Game event log
-- `logs` - System logs
-
-## Development
-
-### Project Structure
 ```
 balletbot/
 ├── main.py                 # Main entry point
-├── bale_api.py            # Bale API wrapper
+├── bale_api.py            # Bale API wrapper (real + mock)
 ├── config.py              # Configuration settings
 ├── requirements.txt       # Dependencies
-├── README.md             # This file
-├── core/                 # Core game systems
+├── test_implementation.py # Basic functionality test
+├── core/                  # Core game systems
 │   ├── game_loop.py      # Message processing
 │   ├── world_manager.py  # World state management
 │   ├── scheduler.py      # Game timing
 │   └── events.py         # Event system
-├── systems/              # Game systems
+├── systems/               # Game systems
 │   ├── player_system.py  # Player management
 │   ├── inventory_system.py # Item management
 │   ├── combat_system.py  # Combat mechanics
@@ -230,18 +211,19 @@ balletbot/
 │   ├── spotter_system.py # Intelligence gathering
 │   ├── offline_system.py # Offline modes
 │   └── construction_system.py # Heavy construction
-├── utils/                # Utilities
-│   ├── db.py            # Database helpers
-│   ├── helpers.py       # Helper functions
-│   └── logger.py        # Logging setup
-├── data/                # Game data
-│   ├── world.sqlite     # Database file
-│   ├── items.json       # Item definitions
-│   ├── recipes.json     # Crafting recipes
-│   └── assets/          # Map images
-└── tests/               # Testing
-    └── simulate.py      # Simulation script
+├── utils/                 # Utilities
+│   ├── file_manager.py   # File-based data management
+│   ├── helpers.py        # Helper functions
+│   └── logger.py         # Logging setup
+├── data/                  # Game data
+│   ├── items.json        # Item definitions
+│   ├── recipes.json      # Crafting recipes
+│   └── assets/           # Map images (placeholder)
+└── tests/                 # Testing
+    └── simulate.py       # Simulation script
 ```
+
+## 🔧 Development
 
 ### Adding New Features
 
@@ -249,7 +231,7 @@ balletbot/
 2. **New Systems**: Create in `systems/` directory
 3. **New Items**: Add to `data/items.json`
 4. **New Recipes**: Add to `data/recipes.json`
-5. **Database Changes**: Update schema in `utils/db.py`
+5. **Data Changes**: Update `utils/file_manager.py`
 
 ### Logging
 
@@ -261,37 +243,25 @@ The bot uses structured logging with different levels:
 
 Logs are written to both console and `logs/balletbot.log`.
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-1. **Database locked**: Make sure only one instance is running
-2. **Import errors**: Check Python path and dependencies
-3. **Bale API errors**: Verify bot token and API implementation
+1. **Import errors**: Check Python path and dependencies
+2. **Bale API errors**: Verify bot token and API implementation
+3. **File permission errors**: Check write permissions for data directory
 4. **Memory issues**: Reduce `TIME_MULTIPLIER` for testing
 
 ### Debug Mode
 
 Set `LOG_LEVEL = "DEBUG"` in `config.py` for detailed logging.
 
-## Contributing
+## 📝 Notes
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For issues and questions:
-1. Check the troubleshooting section
-2. Review the logs in `logs/balletbot.log`
-3. Create an issue on the repository
+- This implementation uses text files instead of SQLite for data persistence
+- The Bale API wrapper supports both real API and mock mode
+- All game mechanics from the original specification are implemented
+- The bot is ready for production use with proper Bale API integration
 
 ---
 

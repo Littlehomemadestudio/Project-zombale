@@ -2,38 +2,116 @@
   "bandage": {
     "item_id": "bandage",
     "name": "Bandage",
+    "type": "med",
     "resources": {
       "cloth": 1
     },
     "intelligence": 0,
     "time_required": 60,
-    "tools_required": []
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 1
   },
   "medkit": {
     "item_id": "medkit",
     "name": "Medkit",
+    "type": "med",
     "resources": {
       "bandage": 2,
       "alcohol": 1
     },
     "intelligence": 10,
     "time_required": 300,
-    "tools_required": []
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 2
+  },
+  "pistol_ammo": {
+    "item_id": "pistol_ammo",
+    "name": "Pistol Ammo",
+    "type": "ammo",
+    "resources": {
+      "metal": 1,
+      "gunpowder": 1
+    },
+    "intelligence": 5,
+    "time_required": 120,
+    "tools_required": [],
+    "quantity": 10,
+    "intelligence_gain": 1
+  },
+  "rifle_ammo": {
+    "item_id": "rifle_ammo",
+    "name": "Rifle Ammo",
+    "type": "ammo",
+    "resources": {
+      "metal": 2,
+      "gunpowder": 1
+    },
+    "intelligence": 15,
+    "time_required": 180,
+    "tools_required": [],
+    "quantity": 10,
+    "intelligence_gain": 2
+  },
+  "gunpowder": {
+    "item_id": "gunpowder",
+    "name": "Gunpowder",
+    "type": "component",
+    "resources": {
+      "charcoal": 2,
+      "sulfur": 1
+    },
+    "intelligence": 20,
+    "time_required": 240,
+    "tools_required": [],
+    "quantity": 5,
+    "intelligence_gain": 3
+  },
+  "charcoal": {
+    "item_id": "charcoal",
+    "name": "Charcoal",
+    "type": "component",
+    "resources": {
+      "wood": 3
+    },
+    "intelligence": 5,
+    "time_required": 180,
+    "tools_required": [],
+    "quantity": 2,
+    "intelligence_gain": 1
+  },
+  "sulfur": {
+    "item_id": "sulfur",
+    "name": "Sulfur",
+    "type": "component",
+    "resources": {
+      "stone": 5
+    },
+    "intelligence": 10,
+    "time_required": 300,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 2
   },
   "rifle_part": {
     "item_id": "rifle_part",
     "name": "Rifle Part",
+    "type": "component",
     "resources": {
       "metal": 3,
       "circuit": 1
     },
-    "intelligence": 20,
+    "intelligence": 25,
     "time_required": 600,
-    "tools_required": ["workshop"]
+    "tools_required": ["repair_kit"],
+    "quantity": 1,
+    "intelligence_gain": 5
   },
   "pistol_assembly": {
     "item_id": "pistol_assembly",
     "name": "Pistol Assembly",
+    "type": "component",
     "resources": {
       "rifle_part": 1,
       "spring": 1,
@@ -41,140 +119,218 @@
     },
     "intelligence": 40,
     "time_required": 900,
-    "tools_required": ["workshop"]
+    "tools_required": ["repair_kit"],
+    "quantity": 1,
+    "intelligence_gain": 8
+  },
+  "spring": {
+    "item_id": "spring",
+    "name": "Spring",
+    "type": "component",
+    "resources": {
+      "metal": 2
+    },
+    "intelligence": 15,
+    "time_required": 300,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 2
   },
   "tank_engine": {
     "item_id": "tank_engine",
     "name": "Tank Engine",
+    "type": "vehicle_part",
     "resources": {
       "steel": 10,
       "engine_parts": 5
     },
     "intelligence": 90,
-    "time_required": 3600,
-    "tools_required": ["advanced_workshop"]
+    "time_required": 7200,
+    "tools_required": ["repair_kit"],
+    "quantity": 1,
+    "intelligence_gain": 15
   },
   "silencer": {
     "item_id": "silencer",
     "name": "Silencer",
+    "type": "weapon_mod",
     "resources": {
       "metal": 5,
       "circuit": 2
     },
     "intelligence": 40,
-    "time_required": 1200,
-    "tools_required": ["workshop"]
+    "time_required": 600,
+    "tools_required": ["repair_kit"],
+    "quantity": 1,
+    "intelligence_gain": 5
   },
-  "shell": {
-    "item_id": "shell",
-    "name": "Shell",
+  "large_backpack": {
+    "item_id": "large_backpack",
+    "name": "Large Backpack",
+    "type": "tool",
     "resources": {
-      "gunpowder": 1,
+      "cloth": 3,
       "metal": 1
     },
     "intelligence": 15,
     "time_required": 300,
-    "tools_required": []
-  },
-  "ammo": {
-    "item_id": "ammo",
-    "name": "Ammunition",
-    "resources": {
-      "gunpowder": 1,
-      "metal": 1
-    },
-    "intelligence": 10,
-    "time_required": 180,
-    "tools_required": []
-  },
-  "repair_kit": {
-    "item_id": "repair_kit",
-    "name": "Repair Kit",
-    "resources": {
-      "metal": 2,
-      "cloth": 1
-    },
-    "intelligence": 5,
-    "time_required": 240,
-    "tools_required": []
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 3
   },
   "flashlight": {
     "item_id": "flashlight",
     "name": "Flashlight",
+    "type": "tool",
     "resources": {
-      "metal": 1,
-      "circuit": 1,
-      "battery": 1
+      "metal": 2,
+      "battery": 1,
+      "circuit": 1
     },
-    "intelligence": 25,
-    "time_required": 600,
-    "tools_required": []
+    "intelligence": 20,
+    "time_required": 240,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 3
   },
   "binoculars": {
     "item_id": "binoculars",
     "name": "Binoculars",
+    "type": "tool",
     "resources": {
-      "metal": 2,
-      "glass": 2,
-      "circuit": 1
+      "metal": 3,
+      "circuit": 2,
+      "glass": 2
     },
     "intelligence": 30,
-    "time_required": 900,
-    "tools_required": ["workshop"]
+    "time_required": 480,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 5
+  },
+  "glass": {
+    "item_id": "glass",
+    "name": "Glass",
+    "type": "component",
+    "resources": {
+      "sand": 3
+    },
+    "intelligence": 25,
+    "time_required": 360,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 3
+  },
+  "sand": {
+    "item_id": "sand",
+    "name": "Sand",
+    "type": "resource",
+    "resources": {
+      "stone": 2
+    },
+    "intelligence": 5,
+    "time_required": 120,
+    "tools_required": [],
+    "quantity": 3,
+    "intelligence_gain": 1
+  },
+  "radio": {
+    "item_id": "radio",
+    "name": "Radio",
+    "type": "tool",
+    "resources": {
+      "metal": 3,
+      "circuit": 3,
+      "battery": 2
+    },
+    "intelligence": 35,
+    "time_required": 600,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 6
+  },
+  "repair_kit": {
+    "item_id": "repair_kit",
+    "name": "Repair Kit",
+    "type": "tool",
+    "resources": {
+      "metal": 2,
+      "cloth": 1
+    },
+    "intelligence": 10,
+    "time_required": 180,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 2
+  },
+  "antibiotic": {
+    "item_id": "antibiotic",
+    "name": "Antibiotic",
+    "type": "med",
+    "resources": {
+      "herbs": 3,
+      "alcohol": 1
+    },
+    "intelligence": 30,
+    "time_required": 480,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 5
+  },
+  "antiviral": {
+    "item_id": "antiviral",
+    "name": "Antiviral",
+    "type": "med",
+    "resources": {
+      "herbs": 5,
+      "alcohol": 2,
+      "circuit": 1
+    },
+    "intelligence": 50,
+    "time_required": 720,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 8
   },
   "spotter_device": {
     "item_id": "spotter_device",
     "name": "Spotter Device",
+    "type": "tool",
     "resources": {
       "circuit": 3,
       "metal": 5
     },
     "intelligence": 60,
-    "time_required": 1800,
-    "tools_required": ["advanced_workshop"]
+    "time_required": 900,
+    "tools_required": ["repair_kit"],
+    "quantity": 1,
+    "intelligence_gain": 10
   },
-  "small_backpack": {
-    "item_id": "small_backpack",
-    "name": "Small Backpack",
+  "fuel": {
+    "item_id": "fuel",
+    "name": "Fuel",
+    "type": "resource",
     "resources": {
-      "cloth": 3,
-      "metal": 1
+      "alcohol": 2,
+      "oil": 1
     },
-    "intelligence": 5,
+    "intelligence": 20,
     "time_required": 300,
-    "tools_required": []
+    "tools_required": [],
+    "quantity": 3,
+    "intelligence_gain": 3
   },
-  "large_backpack": {
-    "item_id": "large_backpack",
-    "name": "Large Backpack",
+  "oil": {
+    "item_id": "oil",
+    "name": "Oil",
+    "type": "resource",
     "resources": {
-      "cloth": 5,
-      "metal": 2,
-      "leather": 2
+      "bone": 2
     },
-    "intelligence": 15,
-    "time_required": 600,
-    "tools_required": ["workshop"]
-  },
-  "water_bottle": {
-    "item_id": "water_bottle",
-    "name": "Water Bottle",
-    "resources": {
-      "plastic": 1
-    },
-    "intelligence": 0,
-    "time_required": 60,
-    "tools_required": []
-  },
-  "basic_rations": {
-    "item_id": "basic_rations",
-    "name": "Basic Rations",
-    "resources": {
-      "food": 2,
-      "water": 1
-    },
-    "intelligence": 0,
-    "time_required": 120,
-    "tools_required": []
+    "intelligence": 10,
+    "time_required": 180,
+    "tools_required": [],
+    "quantity": 1,
+    "intelligence_gain": 2
   }
 }
