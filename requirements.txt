@@ -1,0 +1,4 @@
+bale-python
+pillow
+asyncio
+sqlite3
