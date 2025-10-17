@@ -12,7 +12,12 @@ from pathlib import Path
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
-from bale_api import BaleAPI
+from config import USE_REAL_BALE_API
+
+if USE_REAL_BALE_API:
+    from bale_api_real import BaleAPI
+else:
+    from bale_api_simple import BaleAPI
 from core.game_loop import GameLoop
 from core.world_manager import WorldManager
 from core.scheduler import Scheduler

@@ -12,7 +12,10 @@ from __future__ import annotations
 
 from typing import Tuple, Optional
 
-from bale import Update, CallbackQuery
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bale import Update, CallbackQuery
 from bale.checks import BaseCheck
 from ._basehandler import BaseHandler
 

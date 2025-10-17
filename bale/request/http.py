@@ -15,7 +15,6 @@ import aiohttp
 import logging
 from ssl import SSLCertVerificationError
 from bale.version import BALE_API_BASE_URL, BALE_API_FILE_URL
-from bale.attachments import InputFile
 from bale.utils.request import RequestParams
 from bale._error import __ERROR_CLASSES__, HTTPClientError, APIError, NetworkError, TimeOut, BaleError, HTTPException
 from .parser import ResponseParser
@@ -278,3 +277,6 @@ class HTTPClient:
 
     def promote_chat_member(self, *, params: RequestParams):
         return self.request(Route("POST", "promoteChatMember", self.token), json=params.payload)
+
+    def answer_callback_query(self, *, params: RequestParams):
+        return self.request(Route("POST", "answerCallbackQuery", self.token), json=params.payload)
