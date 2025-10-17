@@ -4,6 +4,7 @@ Configuration settings for BalletBot: Outbreak Dominion
 
 # Bot Configuration
 BOT_TOKEN = "YOUR_BALE_BOT_TOKEN_HERE"  # Replace with actual token
+USE_REAL_BALE_API = True  # Set to False for mock mode during development
 
 # Time Configuration
 TIME_MULTIPLIER = 1  # For dev/testing: 0.1 = 10x faster, 10 = 10x slower

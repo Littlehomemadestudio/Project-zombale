@@ -1,0 +1,87 @@
+{
+  "Forest": {
+    "type": "forest",
+    "danger": 20,
+    "zombies": 0,
+    "connected": [
+      "Urban",
+      "Coast"
+    ],
+    "buildings": [],
+    "properties": {
+      "loot_modifier": 1.0
+    },
+    "last_updated": 1760687818
+  },
+  "Urban": {
+    "type": "urban",
+    "danger": 40,
+    "zombies": 0,
+    "connected": [
+      "Forest",
+      "Downtown"
+    ],
+    "buildings": [
+      "Warehouse",
+      "Shop"
+    ],
+    "properties": {
+      "loot_modifier": 1.2
+    },
+    "last_updated": 1760687818
+  },
+  "Downtown": {
+    "type": "urban",
+    "danger": 60,
+    "zombies": 0,
+    "connected": [
+      "Urban",
+      "Military"
+    ],
+    "buildings": [
+      "Hospital",
+      "Office",
+      "Mall"
+    ],
+    "properties": {
+      "loot_modifier": 1.5
+    },
+    "last_updated": 1760687818
+  },
+  "Military": {
+    "type": "military",
+    "danger": 80,
+    "zombies": 0,
+    "connected": [
+      "Downtown",
+      "Coast"
+    ],
+    "buildings": [
+      "Base",
+      "Armory",
+      "Command"
+    ],
+    "properties": {
+      "loot_modifier": 2.0,
+      "mutant_chance": 0.3
+    },
+    "last_updated": 1760687818
+  },
+  "Coast": {
+    "type": "coast",
+    "danger": 30,
+    "zombies": 0,
+    "connected": [
+      "Forest",
+      "Military"
+    ],
+    "buildings": [
+      "Lighthouse",
+      "Dock"
+    ],
+    "properties": {
+      "loot_modifier": 1.1
+    },
+    "last_updated": 1760687818
+  }
+}
