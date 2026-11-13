@@ -116,11 +116,17 @@ class GameSurfaceView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val worldX = event.x * GameEngine.WORLD_WIDTH / width.coerceAtLeast(1)
-        val worldY = event.y * GameEngine.WORLD_HEIGHT / height.coerceAtLeast(1)
+        val viewport = GameViewport.fit(width, height)
+        val worldX = viewport.toWorldX(event.x)
+        val worldY = viewport.toWorldY(event.y)
 
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
+                if (!viewport.contains(event.x, event.y)) {
+                    pointerDown = false
+                    engine.setTrigger(false)
+                    return true
+                }
                 pointerDown = true
                 when (engine.state) {
                     RunState.MENU -> {
@@ -147,9 +153,13 @@ class GameSurfaceView @JvmOverloads constructor(
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
-                if (pointerDown && engine.state == RunState.PLAYING && worldY < 1320f) {
-                    engine.setAim(worldX, worldY)
-                    engine.setTrigger(true)
+                if (pointerDown && engine.state == RunState.PLAYING) {
+                    if (viewport.contains(event.x, event.y) && worldY < 1320f) {
+                        engine.setAim(worldX, worldY)
+                        engine.setTrigger(true)
+                    } else {
+                        engine.setTrigger(false)
+                    }
                 }
                 return true
             }

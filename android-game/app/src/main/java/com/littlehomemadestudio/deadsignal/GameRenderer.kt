@@ -22,11 +22,11 @@ class GameRenderer {
     private val ink = Color.rgb(8, 14, 20)
 
     fun draw(canvas: Canvas, engine: GameEngine, bestScore: Int) {
+        canvas.drawColor(Color.rgb(3, 7, 10))
+        val viewport = GameViewport.fit(canvas.width, canvas.height)
         val save = canvas.save()
-        canvas.scale(
-            canvas.width / GameEngine.WORLD_WIDTH,
-            canvas.height / GameEngine.WORLD_HEIGHT
-        )
+        canvas.translate(viewport.offsetX, viewport.offsetY)
+        canvas.scale(viewport.scale, viewport.scale)
         drawCorridor(canvas)
         when (engine.state) {
             RunState.MENU -> drawMenu(canvas, bestScore)
